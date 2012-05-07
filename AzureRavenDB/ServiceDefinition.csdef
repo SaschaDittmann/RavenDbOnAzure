@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ServiceDefinition name="AzureRavenDB" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition">
+  <WorkerRole name="RavenDbWorker" vmsize="ExtraSmall">
+    <ConfigurationSettings>
+      <Setting name="StorageAccount" />
+      <Setting name="AnonymousUserAccessMode" />
+      <Setting name="HttpCompression" />
+      <Setting name="DefaultStorageTypeName" />
+      <Setting name="CloudDriveContainer" />
+      <Setting name="EnableTableStorageTraceListener" />
+      <Setting name="RavenUserName" />
+      <Setting name="RavenPassword" />
+    </ConfigurationSettings>
+    <Endpoints>
+      <InputEndpoint name="Raven" protocol="tcp" port="8080" localPort="8080" />
+      <InternalEndpoint name="Replication" protocol="tcp" />
+    </Endpoints>
+    <LocalResources>
+      <LocalStorage name="RavenCache" cleanOnRoleRecycle="false" sizeInMB="128" />
+    </LocalResources>
+    <Startup>
+      <Task commandLine="Startup\GrantHttpPermissions.cmd" executionContext="elevated" taskType="simple">
+        <Environment>
+          <Variable name="TestIsEmulated">
+            <RoleInstanceValue xpath="/RoleEnvironment/Deployment/@emulated" />
+          </Variable>
+        </Environment>
+      </Task>
+      <Task commandLine="Startup\AddRavenDbUser.cmd" executionContext="elevated" taskType="background">
+        <Environment>
+          <Variable name="TestIsEmulated">
+            <RoleInstanceValue xpath="/RoleEnvironment/Deployment/@emulated" />
+          </Variable>
+          <Variable name="RavenUserName">
+            <RoleInstanceValue xpath="/RoleEnvironment/CurrentInstance/ConfigurationSettings/ConfigurationSetting[@name='RavenUserName']/@value" />
+          </Variable>
+          <Variable name="RavenPassword">
+            <RoleInstanceValue xpath="/RoleEnvironment/CurrentInstance/ConfigurationSettings/ConfigurationSetting[@name='RavenPassword']/@value" />
+          </Variable>
+        </Environment>
+      </Task>
+    </Startup>
+  </WorkerRole>
+</ServiceDefinition>

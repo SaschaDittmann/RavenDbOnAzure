@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ServiceConfiguration serviceName="AzureRavenDB" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceConfiguration" osFamily="1" osVersion="*">
+  <Role name="RavenDbWorker">
+    <Instances count="2" />
+    <ConfigurationSettings>
+      <Setting name="StorageAccount" value="DefaultEndpointsProtocol=https;AccountName=IhrStorageKonto;AccountKey=IhrStorageKontoSchluessel" />
+      <Setting name="AnonymousUserAccessMode" value="All" />
+      <Setting name="HttpCompression" value="true" />
+      <Setting name="DefaultStorageTypeName" value="munin" />
+      <Setting name="CloudDriveContainer" value="raven" />
+      <Setting name="RavenUserName" value="RavenDbUser" />
+      <Setting name="RavenPassword" value="Pa$$w0rd" />
+      <Setting name="EnableTableStorageTraceListener" value="true" />
+    </ConfigurationSettings>
+  </Role>
+</ServiceConfiguration>
